@@ -472,7 +472,7 @@ class Mdf(Mdf4, Mdf3):
         else:
             return self._convert_all_channel4()
 
-    def plot(self, channel_name_list_of_list):
+    def plot(self, channel_name_list_of_list, plt_title='', exportName=''):
         """Plot channels with Matplotlib
 
         Parameters
@@ -498,7 +498,7 @@ class Mdf(Mdf4, Mdf3):
             cursor_possible = False
         if isinstance(channel_name_list_of_list, str):
             channel_name_list_of_list = [channel_name_list_of_list]  # converts in list
-        for channel_name_list in channel_name_list_of_list:
+        for idx, channel_name_list in enumerate(channel_name_list_of_list):
             fig = plt.subplot(len(channel_name_list_of_list), 1, channel_name_list_of_list.index(channel_name_list) + 1)
             if isinstance(channel_name_list, str):
                 channel_name_list = [channel_name_list]  # converts in list
@@ -540,9 +540,14 @@ class Mdf(Mdf4, Mdf3):
                     warn('Channel {} not existing'.format(channelName))
             plt.grid(True)
             plt.legend(loc="upper left", frameon=False)
-            plt.title('')
+            if idx == 0:
+                plt.title(plt_title)
+            else:
+                plt.title('')
         if cursor_possible:
             datacursor()
+        if exportName != '':
+            plt.savefig(exportName)
         plt.show()
         return fig
 
